@@ -1,5 +1,8 @@
 const { mdLinks } = require("../src/index.js");
 const { absolutePath } = require("../src/routeExist.js");
+const { getFilesMd, readAllMds, validate } = require("../src/getFilesMd.js");
+
+const path = require('path');
 
 
 // FUNCIÓN mdLinks
@@ -97,19 +100,23 @@ describe('readAllMds', () => {
 
 
 // FUNCION validate
-describe('validate', () => {
-  it('Debería ser una función', () => {
-    expect(typeof validate).toBe('function');
+it('debería validar los enlaces ,mostrarme href, text y file', () => {
+  const arrayLinks = [
+    { href: 'https://www.google.com', text: 'Enlace a Google', file: 'prueba/one.md' },
+    { href: 'https://www.youtube.com/watch?v=95BFumHfwAA', text: 'Enlace a youtube', file: 'prueba/three.md' },
+  ];
+  // Mockear la función fetch para simular que la respuestas sea exitosa
+  global.fetch = jest.fn().mockResolvedValue({
+    status: 200,
+    statusText: 'OK'
   });
-
-  it('Debería validar los enlaces y actualizar los campos status y statusText', () => {
-    const arrayLinks = [{href: 'https://www.google.com/', text: 'Enlace a Google', file: 'C:\\DEV005-md-links\\src\\prueba\\one.md',},];
-
-    return validate(arrayLinks)
-      .then((updatedLinks) => {
-        expect(updatedLinks).toEqual([{ href: 'https://www.google.com/',text: 'Enlace a Google',file: 'C:\\DEV005-md-links\\src\\prueba\\one.md',status: 200,statusText: 'OK',}]);
-      });
-  });
+  // Llamar a la función 
+  return validate(arrayLinks)
+    .then(() => {
+      expect(arrayLinks).toEqual([
+        { href: 'https://www.google.com', text: 'Enlace a Google', file: 'prueba/one.md', status: 200, statusText: 'OK' },
+        { href: 'https://www.youtube.com/watch?v=95BFumHfwAA', text: 'Enlace a youtube', file: 'prueba/three.md', status: 200, statusText: 'OK' },
+      ]);
+    });
 });
-
 

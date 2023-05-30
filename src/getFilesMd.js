@@ -6,7 +6,7 @@ const { JSDOM } = jsdom;
 const fetch = require('node-fetch');
 
 
-// FUNCIÓN RECURSIVA: BUSCA ARCHIVOS .mds, los encuentra ,los agrega(array), y los devuelve.
+// FUNCIÓN RECURSIVA: Buscar archivos mds,los agrega(array) y los devuelve.
 const getFilesMd = (directoryPath) => {
   let arrayFilesMd = [];
   const route = fs.lstatSync(directoryPath);//permite verificar archivo/directorio
@@ -16,7 +16,7 @@ const getFilesMd = (directoryPath) => {
     const arrayElements = fs.readdirSync(directoryPath);
     //Permite obtener elementos de un directorioy,tendremos un array(archivos y directorios)
     arrayElements.forEach((element) => {
-      // Para cada elemento encontrado en el directorio, se construye una nueva ruta
+      // Para cada elemento encontrado en el directorio,construye una nueva ruta
       const newPath = path.join(directoryPath, element);
       arrayFilesMd = arrayFilesMd.concat(getFilesMd(newPath));
       //llamando getFilesMd para cada elemento encontrado en el directorio.
@@ -26,7 +26,7 @@ const getFilesMd = (directoryPath) => {
 };
 
 
-// FUNCIÓN: CONVERTIR ARCHIVOS MD A HTML
+// FUNCIÓN PARA CONVERTIR ARCHIVOS MD A HTML
 const mdToHtml = (data) => {
   const htmlContent = marked(data, {
     headerIds: false,
@@ -35,13 +35,12 @@ const mdToHtml = (data) => {
   //jsdom: Simula un entorno de navegador
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a'); //.length
-  // console.log(links);
   return links;
   //Retornamos nodos de enlaces encontrados del html(convertido) 
 };
 
 
-// FUNCIÓN: OBTENER LINKS DE lOS ARCHIVOS .md
+// FUNCIÓN PARA OBTENER LINKS DE lOS ARCHIVOS md
 const getLinks = (links, mdfilePath) => {
   const arrayLinks = [];
   links.forEach((link) => {
@@ -51,13 +50,13 @@ const getLinks = (links, mdfilePath) => {
       file: mdfilePath,
     };
     arrayLinks.push(linkObject);
-    // console.log(arrayLinks);
   });
   return arrayLinks;
   //retorna un array de objetos para cada archivo
 };
 
-// FUNCIÓN: LEE CONTENIDO DE UN ARCHIVO ESPECIFICADO POR mdFilePath
+
+// FUNCIÓN LEE CONTENIDO DE UN ARCHIVO ESPECIFICADO POR mdFilePath
 //trae el contenido de un solo archivo
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -75,7 +74,7 @@ const readFile = (filePath) => {
 };
 
 
-// FUNCIÓN:TOMA UN ARRAY DE RUTAS .md
+// FUNCIÓN QUE TOMA UN ARRAY DE RUTAS .md
 const readAllMds = (arrayFilesMd) => {
   const arrayLinks = arrayFilesMd.map((file) => readFile(file));
 
@@ -84,9 +83,7 @@ const readAllMds = (arrayFilesMd) => {
 };
 
 
-
-// FUNCIÓN: VALIDAR CADA LINK DEL ARRAY
-// Realizando una solicitud http a cada url y obteniendo el estado de la rsp
+// FUNCIÓN PARA VALIDAR CADA LINK DEL ARRAY
 const validate = (arrayLinks)=> {
   return new Promise((resolve) => {
     //permite realizar operaciones asíncronas
@@ -95,7 +92,6 @@ const validate = (arrayLinks)=> {
       .then((res) => {
         element.status = res.status;
         element.statusText = res.statusText;
-        // console.log(fetchLinks)pending;
       })
       .catch((err) =>{
         element.status = err;
@@ -109,8 +105,7 @@ const validate = (arrayLinks)=> {
 } ;
 
 
-// FUNCION STATS
-
+// FUNCIONES PARA ESTADO DE LINKS
 const stats = (arrayObjs) => {
   let uniqueSet = new Set(arrayObjs.map((link) => link.href)).size;
   return {
@@ -132,8 +127,6 @@ const statsBroken = (arrayObjs) => {
 module.exports = {
   getFilesMd, 
   readAllMds,
-  readFile,
-  mdToHtml,
   validate,
   stats,
   statsBroken
