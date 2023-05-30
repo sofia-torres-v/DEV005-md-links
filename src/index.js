@@ -2,6 +2,7 @@ const { existPath } = require('./routeExist.js');
 const { getFilesMd, readAllMds } = require('./getFilesMd.js');
 const process = require('process');//Acceso a los argumentos ingresados desde línea de comandos.
 const userPath = process.argv[2];
+const {validate} = require('./getFilesMd.js');
 
 
 // FUNCIÓN MD-LINKS
@@ -12,8 +13,8 @@ const mdLinks = (userPath) => {
     } else { 
       const arrayFilesMd = getFilesMd(userPath);
       readAllMds(arrayFilesMd)
-      .then((res) => {
-        resolve(res.flat()); //Quede en solo un array
+      .then((link) => {
+        resolve(validate(link.flat())); //Quede en solo un array
       });
     }
   });
@@ -28,6 +29,7 @@ mdLinks(userPath)
     return error;
   });
   
+
 module.exports = {
   mdLinks
 };
