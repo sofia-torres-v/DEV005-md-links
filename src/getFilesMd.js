@@ -111,7 +111,6 @@ const validate = (arrayLinks)=> {
 
 // FUNCION STATS
 
-
 const stats = (arrayObjs) => {
   let uniqueSet = new Set(arrayObjs.map((link) => link.href)).size;
   return {

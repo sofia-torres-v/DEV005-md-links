@@ -39,3 +39,77 @@ describe('absolutePath', () => {
 });
 
 
+//FUNCION getFilesMd
+describe('getFilesMd', () => {
+  it("Deberia ser una función", () => {
+    expect(typeof getFilesMd).toBe("function");
+  });
+describe('getFilesMd', () => {
+  it('Debe extraer el contenido de un archivo y devolverlo como un string', () => {
+    const cwd = process.cwd();
+    const filePath = path.join(cwd, "src\\prueba\\four.md");
+    const result = getFilesMd(filePath);
+    expect(result).toEqual(
+    ['C:\\DEV005-md-links\\src\\prueba\\four.md' ]);
+  });
+  it('Debe devolver un array con el contenido de la carpeta', () => {
+    const filePath = 'src/prueba'; 
+    const result = getFilesMd(filePath);
+    expect(result).toEqual([
+      "src\\prueba\\four.md",
+      "src\\prueba\\one.md",
+      "src\\prueba\\three.md",
+      "src\\prueba\\two.md",
+    ]);
+  });
+});
+});
+
+
+//FUNCION readAllMds
+describe('readAllMds', () => {
+  it('Debería ser una función', () => {
+    expect(typeof readAllMds).toBe('function');
+  });
+  it('Deberia retornar un array de links', () => {
+    const arrayFilesMd = ['C:\\DEV005-md-links\\src\\prueba\\one.md', 'C:\\DEV005-md-links\\src\\prueba\\three.md', 'C:\\DEV005-md-links\\src\\prueba\\two.md'];
+
+    return readAllMds(arrayFilesMd).then((result) => {
+
+      expect(result).toEqual([ {   
+        href: 'https://www.google.com/',
+        text: 'Enlace a Google',
+        file: 'C:\\DEV005-md-links\\src\\prueba\\one.md'
+      },
+      {
+        href: 'https://www.youtube.com/watch?v=95BFumHfwAA',
+        text: 'Enlace a youtube',
+        file: 'C:\\DEV005-md-links\\src\\prueba\\three.md'
+      },
+      {
+        href: 'https://www.freecodecamp.org/',
+        text: 'Enlace a freecodecamp',
+        file: 'C:\\DEV005-md-links\\src\\prueba\\two.md'
+      }]);
+    });
+  });
+});
+
+
+// FUNCION validate
+describe('validate', () => {
+  it('Debería ser una función', () => {
+    expect(typeof validate).toBe('function');
+  });
+
+  it('Debería validar los enlaces y actualizar los campos status y statusText', () => {
+    const arrayLinks = [{href: 'https://www.google.com/', text: 'Enlace a Google', file: 'C:\\DEV005-md-links\\src\\prueba\\one.md',},];
+
+    return validate(arrayLinks)
+      .then((updatedLinks) => {
+        expect(updatedLinks).toEqual([{ href: 'https://www.google.com/',text: 'Enlace a Google',file: 'C:\\DEV005-md-links\\src\\prueba\\one.md',status: 200,statusText: 'OK',}]);
+      });
+  });
+});
+
+
