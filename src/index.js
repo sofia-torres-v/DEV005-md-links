@@ -28,7 +28,6 @@ mdLinks(userPath)
     return error;
   });
   
-
 module.exports = {
   mdLinks
 };
