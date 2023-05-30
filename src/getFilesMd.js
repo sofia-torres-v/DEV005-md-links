@@ -1,28 +1,26 @@
 const fs = require('fs');
 const path = require('path');
-const { marked } = require('marked');
+const { marked}  = require('marked');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const fetch = require('node-fetch');
 
 
-// FUNCIÓN RECURSIVA: LEER ARCHIVO Y DIRECTORIO LUEGO EXTRAER SOLO archivos.md
+// FUNCIÓN RECURSIVA: BUSCA ARCHIVOS .mds, los encuentra ,los agrega(array), y los devuelve.
 const getFilesMd = (directoryPath) => {
   let arrayFilesMd = [];
-  const route = fs.lstatSync(directoryPath);
-  //obtener información del archivo específicado
+  const route = fs.lstatSync(directoryPath);//permite verificar archivo/directorio
   if (route.isFile()) {
     arrayFilesMd.push(directoryPath);
   } else if (route.isDirectory()) {
     const arrayElements = fs.readdirSync(directoryPath);
-    // fs.readdirSync nos da archivos que se encuentran en un directorio
+    //Permite obtener elementos de un directorioy,tendremos un array(archivos y directorios)
     arrayElements.forEach((element) => {
+      // Para cada elemento encontrado en el directorio, se construye una nueva ruta
       const newPath = path.join(directoryPath, element);
       arrayFilesMd = arrayFilesMd.concat(getFilesMd(newPath));
-      //Recursión,llamando getFilesMd para cada elemento encontrado en el directorio.
+      //llamando getFilesMd para cada elemento encontrado en el directorio.
     });
-  } else {
-    return [];
   }
   return arrayFilesMd.filter((file) => path.extname(file) === '.md');
 };
@@ -30,12 +28,10 @@ const getFilesMd = (directoryPath) => {
 
 // FUNCIÓN: CONVERTIR ARCHIVOS MD A HTML
 const mdToHtml = (data) => {
-  //Market covierte contenido .md a contenido html.
   const htmlContent = marked(data, {
     headerIds: false,
     mangle: false,
   });
-  // console.log(htmlContent);
   //jsdom: Simula un entorno de navegador
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a'); //.length
@@ -55,10 +51,10 @@ const getLinks = (links, mdfilePath) => {
       file: mdfilePath,
     };
     arrayLinks.push(linkObject);
+    // console.log(arrayLinks);
   });
-  // console.log(arrayLinks);
   return arrayLinks;
-  //retorna un array para cada archivo
+  //retorna un array de objetos para cada archivo
 };
 
 // FUNCIÓN: LEE CONTENIDO DE UN ARCHIVO ESPECIFICADO POR mdFilePath
@@ -73,35 +69,36 @@ const readFile = (filePath) => {
         const convertHtml = mdToHtml(data);
         const linksFromHtml = getLinks(convertHtml, filePath);        
         resolve(linksFromHtml);
-        // console.log(linksFromHtml);
       }
     });
   });
 };
 
 
-//FUNCIÓN:TOMA UN ARRAY DE RUTAS .md
+// FUNCIÓN:TOMA UN ARRAY DE RUTAS .md
 const readAllMds = (arrayFilesMd) => {
-  const arrayLinks = arrayFilesMd.map((file) => {
-    return readFile(file);
-  });
+  const arrayLinks = arrayFilesMd.map((file) => readFile(file));
+
   return Promise.all(arrayLinks);
   //Retorna una promesa que se resuelve con un array de array de enlaces
 };
 
+
+
 // FUNCIÓN: VALIDAR CADA LINK DEL ARRAY
-//Realizando una solicitud http a cada url y obteniendo el estado de la rsp
+// Realizando una solicitud http a cada url y obteniendo el estado de la rsp
 const validate = (arrayLinks)=> {
   return new Promise((resolve) => {
     //permite realizar operaciones asíncronas
-    let fetchLinks = arrayLinks.map((link) => {
-      return fetch(link.href)
+    let fetchLinks = arrayLinks.map((element) => {
+      return fetch(element)
       .then((res) => {
-        link.status = res.status;
-        link.statusText = res.statusText;
+        element.status = res.status;
+        element.statusText = res.statusText;
+        // console.log(fetchLinks)pending;
       })
       .catch((err) =>{
-        link.status = err;
+        element.status = err;
       });
     });
     Promise.all(fetchLinks).then(() =>{
@@ -111,6 +108,34 @@ const validate = (arrayLinks)=> {
   });
 } ;
 
+
+// FUNCION STATS
+
+
+const stats = (arrayObjs) => {
+  let uniqueSet = new Set(arrayObjs.map((link) => link.href)).size;
+  return {
+    Total: arrayObjs.length,
+    Uniques: uniqueSet,
+  };
+};
+
+const statsBroken = (arrayObjs) => {
+  let uniqueSet = new Set(arrayObjs.map((link) => link.href)).size;
+  return {
+    Total: arrayObjs.length,
+    Uniques: uniqueSet,
+    Broken: (arrayObjs.filter(element => element.statusText === 'Not Found')).length,
+  };
+};
+
+
 module.exports = {
-  getFilesMd, readAllMds, validate
+  getFilesMd, 
+  readAllMds,
+  readFile,
+  mdToHtml,
+  validate,
+  stats,
+  statsBroken
 };

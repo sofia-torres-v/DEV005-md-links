@@ -1,34 +1,52 @@
-const { existPath } = require('./routeExist.js');
-const { getFilesMd, readAllMds } = require('./getFilesMd.js');
-const process = require('process');//Acceso a los argumentos ingresados desde línea de comandos.
-const userPath = process.argv[2];
-const {validate} = require('./getFilesMd.js');
+const { existPath, absolutePath } = require('./routeExist.js');
+const { getFilesMd, readAllMds, validate, stats, statsBroken } = require('./getFilesMd.js');
 
 
-// FUNCIÓN MD-LINKS
-const mdLinks = (userPath) => {
+
+//contiene la lógica principal para analizar los archivos y extraer los enlaces.
+const mdLinks = (userPath, options) => {
+  const route = absolutePath(userPath);
   return new Promise((resolve, reject) => {
     if (!existPath(userPath)) {
       reject(new Error('Error, la ruta no existe'));
-    } else { 
-      const arrayFilesMd = getFilesMd(userPath);
-      readAllMds(arrayFilesMd)
+
+    } else if (options.validate === true && (options.stats === false)) {
+      const arrayFiles = getFilesMd(route);
+      readAllMds(arrayFiles)
       .then((link) => {
-        resolve(validate(link.flat())); //Quede en solo un array
+        resolve(validate(link.flat()));
       });
-    }
+
+    } else if (options.validate === false && (options.stats === true)){
+      const arrayFiles = getFilesMd(route);
+      readAllMds(arrayFiles)
+      .then((link) => {
+        validate(link.flat()).then((links) => {
+          resolve(stats(links));
+        });
+      });
+    
+    //probando
+  } else if (options.stats === true && (options.validate === true)){
+    const arrayFiles = getFilesMd(route);
+    readAllMds(arrayFiles)
+    .then((link) => {
+      validate(link.flat()).then((links) => {
+        resolve(statsBroken(links));
+      });
+    });
+
+
+    } else {
+      const arrayFiles = getFilesMd(route);
+      readAllMds(arrayFiles)
+      .then((res) => {
+        resolve(res.flat());
+        console.log(readAllMds);
+      });
+      }
   });
 };
-
-mdLinks(userPath)
-  .then((res) => {
-    console.log('Este es el array de OBJS:', res);
-  })
-  .catch((error) => {
-    // console.log(`Error: ${error}`);
-    return error;
-  });
-  
 
 module.exports = {
   mdLinks
