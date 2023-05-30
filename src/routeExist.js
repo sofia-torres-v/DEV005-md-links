@@ -23,7 +23,6 @@ const absolutePath = (userPath) => {
 	}
 };
 
-
 module.exports = {
 	existPath,absolutePath
 };

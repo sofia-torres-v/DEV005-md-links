@@ -3,10 +3,9 @@ const path = require('path');
 const { marked } = require('marked');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
-// const fetch = require('node-fetch');
 
 
-// FUNCIÓN RECURSIVA: LEER ARCHIVO Y DIRECTORIO LUEGO EXTRAER SOLO archivos.md
+// FUNCIÓN RECURSIVA: BUSCA ARCHIVO Y DIRECTORIO, LUEGO EXTRAER SOLO archivos.md
 const getFilesMd = (directoryPath) => {
   let arrayFilesMd = [];
   const route = fs.lstatSync(directoryPath);
@@ -35,11 +34,9 @@ const mdToHtml = (data) => {
     headerIds: false,
     mangle: false,
   });
-  // console.log(htmlContent);
   //jsdom: Simula un entorno de navegador
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a'); //.length
-  // console.log(links);
   return links;
   //Retornamos nodos de enlaces encontrados del html(convertido) 
 };
@@ -56,7 +53,7 @@ const getLinks = (links, mdfilePath) => {
     };
     arrayLinks.push(linkObject);
   });
-  // console.log(arrayLinks);
+
   return arrayLinks;
   //retorna un array para cada archivo
 };
@@ -88,9 +85,6 @@ const readAllMds = (arrayFilesMd) => {
   return Promise.all(arrayLinks);
   //Retorna una promesa que se resuelve con un array de array de enlaces
 };
-// fetch('https://nodejs.org/es/').then((res) => {
-//   console.log(res);
-// });
 
 module.exports = {
   getFilesMd, readAllMds
