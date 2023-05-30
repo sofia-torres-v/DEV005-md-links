@@ -3,9 +3,10 @@ const path = require('path');
 const { marked } = require('marked');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const fetch = require('node-fetch');
 
 
-// FUNCIÓN RECURSIVA: BUSCA ARCHIVO Y DIRECTORIO, LUEGO EXTRAER SOLO archivos.md
+// FUNCIÓN RECURSIVA: LEER ARCHIVO Y DIRECTORIO LUEGO EXTRAER SOLO archivos.md
 const getFilesMd = (directoryPath) => {
   let arrayFilesMd = [];
   const route = fs.lstatSync(directoryPath);
@@ -34,9 +35,11 @@ const mdToHtml = (data) => {
     headerIds: false,
     mangle: false,
   });
+  // console.log(htmlContent);
   //jsdom: Simula un entorno de navegador
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a'); //.length
+  // console.log(links);
   return links;
   //Retornamos nodos de enlaces encontrados del html(convertido) 
 };
@@ -53,7 +56,7 @@ const getLinks = (links, mdfilePath) => {
     };
     arrayLinks.push(linkObject);
   });
-
+  // console.log(arrayLinks);
   return arrayLinks;
   //retorna un array para cada archivo
 };
@@ -86,6 +89,28 @@ const readAllMds = (arrayFilesMd) => {
   //Retorna una promesa que se resuelve con un array de array de enlaces
 };
 
+// FUNCIÓN: VALIDAR CADA LINK DEL ARRAY
+//Realizando una solicitud http a cada url y obteniendo el estado de la rsp
+const validate = (arrayLinks)=> {
+  return new Promise((resolve) => {
+    //permite realizar operaciones asíncronas
+    let fetchLinks = arrayLinks.map((link) => {
+      return fetch(link.href)
+      .then((res) => {
+        link.status = res.status;
+        link.statusText = res.statusText;
+      })
+      .catch((err) =>{
+        link.status = err;
+      });
+    });
+    Promise.all(fetchLinks).then(() =>{
+      resolve(arrayLinks);
+      //retorna un array de enlaces actualizados
+    });
+  });
+} ;
+
 module.exports = {
-  getFilesMd, readAllMds
+  getFilesMd, readAllMds, validate
 };
