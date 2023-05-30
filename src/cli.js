@@ -1,7 +1,6 @@
-// punto de entrada para recibir los argumentos de línea de comandos y realizar el procesamiento inicial
-
+// Punto de entrada para recibir los argumentos de línea de comandos 
 const { mdLinks } = require('./index.js');
-const { mdLinks } = require('./index.js');
+const {statsBroken} = require('./getFilesMd.js');
 const process = require('process');
 const userPath = process.argv[2];
 
@@ -11,9 +10,6 @@ let optionsObj = {
 };
 
 const options = process.argv;
-// const [,,, opt1, opt2] = process.argv;
-// console.log(opt1, 11);
-// console.log(opt2, 12);
 
 if( options.includes('--validate') && (!options.includes('--stats'))){
     optionsObj.validate = true;
@@ -32,11 +28,15 @@ if( options.includes('--validate') && (!options.includes('--stats'))){
 
 mdLinks(userPath, optionsObj)
   .then((res) => {
-    console.log('Este es el array de OBJS:', res);
+    if (optionsObj.stats === true) {
+      const statsTotal = statsBroken(res);
+      console.log(`Total: ${statsTotal.Total} Unique: ${statsTotal.Uniques} ${statsTotal.Broken ?  `Broken: ${statsTotal.Broken}`  : ''} `);
+    }else{
+      console.log(res);
+    }
+    // console.log('Este es el array de OBJS:', res);
   })
   .catch((error) => {
     // console.log(`Error: ${error}`);
     return error;
   });
-
-
