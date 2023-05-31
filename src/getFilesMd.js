@@ -66,6 +66,7 @@ const readFile = (filePath) => {
         reject(error);
       } else {
         const convertHtml = mdToHtml(data);
+        // console.log(convertHtml);
         const linksFromHtml = getLinks(convertHtml, filePath);        
         resolve(linksFromHtml);
       }
@@ -127,6 +128,8 @@ const statsBroken = (arrayObjs) => {
 module.exports = {
   getFilesMd, 
   readAllMds,
+  getLinks,
+  readFile,
   validate,
   stats,
   statsBroken
