@@ -2,19 +2,19 @@ const fs = require('fs');
 const path = require('path');
 
 
-// FUNCIÓN: VALIDAR EXISTENCIA DE RUTA
+// FUNCTION: VALIDATE ROUTE EXISTENCE
 const existPath = (userPath) => {
 	if (fs.existsSync(userPath)){
-		console.log('La ruta existe');
+		console.log('The route exists');
 		return true;
 	} else {
-		console.log('La ruta ingresada no existe');
+		console.log('The path entered does not exist');
 		return false;
 	}
 };
 
 
-// FUNCIÓN: VERIFICA SI RUTA ES ABSOLUTA, SI NO LO ES, CONVERTIR A ABSOLUTA
+// FUNCTION: CHECK IF PATH IS ABSOLUTE, IF NOT, CONVERT TO ABSOLUTE
 const absolutePath = (userPath) => {
 	if(path.isAbsolute(userPath)) {
 		return userPath;

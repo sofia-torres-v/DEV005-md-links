@@ -1,8 +1,11 @@
-// Punto de entrada para recibir los argumentos de línea de comandos 
+#!/usr/bin/env node
+
 const { mdLinks } = require('./index.js');
 const {statsBroken} = require('./getFilesMd.js');
-const process = require('process');
+const process = require('process');//to access terminal arguments
 const userPath = process.argv[2];
+const {colors }= require ('colors')
+
 
 let optionsObj = {
   validate: false,
@@ -29,14 +32,14 @@ if( options.includes('--validate') && (!options.includes('--stats'))){
 mdLinks(userPath, optionsObj)
   .then((res) => {
     if (optionsObj.stats === true) {
-      const statsTotal = statsBroken(res);
-      console.log(`Total: ${statsTotal.Total} Unique: ${statsTotal.Uniques} ${statsTotal.Broken ?  `Broken: ${statsTotal.Broken}`  : ''} `);
+      const statsTotal = statsBroken(res); // This function returns an object
+      console.log(`Total: ${statsTotal.Total} Unique: ${statsTotal.Uniques} ${statsTotal.Broken ? `Broken: ${statsTotal.Broken}`.red : ''} `.blue);
+
     }else{
       console.log(res);
     }
-    // console.log('Este es el array de OBJS:', res);
   })
   .catch((error) => {
-    // console.log(`Error: ${error}`);
+    console.log(`Error: ${error}`);
     return error;
   });

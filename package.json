@@ -1,5 +1,8 @@
 {
-  "name": "md-links",
+  "name": "sofia",
+  "bin": {
+    "md-links": "src/cli.js"
+  },
   "version": "0.1.0",
   "engines": {
     "node": ">=16.x"
@@ -25,8 +28,10 @@
   },
   "homepage": "https://github.com/sofia-torres-v/DEV005-md-links#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "jsdom": "^22.0.0",
     "marked": "^5.0.2",
+    "md-links": "^0.1.0",
     "node-fetch": "^2.6.11"
   },
   "devDependencies": {

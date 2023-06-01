@@ -7,7 +7,7 @@ const mdLinks = (userPath, options) => {
   const route = absolutePath(userPath);
   return new Promise((resolve, reject) => {
     if (!existPath(userPath)) {
-      reject(new Error('Error, la ruta no existe'));
+      reject(new Error('Error, the path does not exist'));
     }
     
     if (options.validate === true ) {
