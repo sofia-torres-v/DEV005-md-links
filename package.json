@@ -1,7 +1,7 @@
 {
-  "name": "sofia",
+  "name": "st-mdlinks",
   "bin": {
-    "md-links": "src/cli.js"
+    "md-Links": "src/cli.js"
   },
   "version": "0.1.0",
   "engines": {
