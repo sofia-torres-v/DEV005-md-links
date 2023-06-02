@@ -42,7 +42,7 @@ _Diagrama de flujo con opciones_
 Para la construcción de esta librería, se utilizaron las siguientes herramientas y dependencias:
 
 #### Ejecución
-Node.js: Entorno de desarrollo de JavaScript.
+* Node.js: Entorno de desarrollo de JavaScript.
 
 #### Dependencias
 
@@ -62,15 +62,14 @@ Node.js: Entorno de desarrollo de JavaScript.
 ## 5. Guía de Uso e instalación de la Librería
 
 ###  Instalación
-
-A continuación, te explicare cómo instalar la librería en tu proyecto:
+A continuación, sigue estos pasos para instalar la librería en tu proyecto:
 
 1. Abre una terminal y navega hasta el directorio de tu proyecto.
 2. Ejecuta el siguiente comando: npm install  `sofia-torres-v/DEV005-md-links`
 
 ### Modo de Uso Básico
 
-El ejecutable de nuestra aplicación puede ejecutarse de la siguiente manera a través de la terminal:
+El ejecutable de esta aplicación puede ejecutarse de la siguiente manera a través de la terminal:
 
 En el primer caso, si el usuario simplemente ingresa el siguiente comando en la terminal :
    
@@ -167,10 +166,10 @@ También acepta el siguiente orden
 
 ### Desplegado en NPM
 
+Enlace a la librería publicada en [npm](https://www.npmjs.com/package/st-md-links) para obtener más información .
 
 
-
-
+****
 
 
 
