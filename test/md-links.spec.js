@@ -30,7 +30,7 @@ describe("mdLinks", () => {
   });
 
   it("If you enter option 'validate' it will return the links showing href,text,file,status and statusText", () => {
-    const arrPrueba = [
+    const arrFiles = [
       {
         href: 'https://mascoteando-andrenavas.vercel.app/error',
         text: 'Mascoteando',
@@ -62,7 +62,7 @@ describe("mdLinks", () => {
     ];
     const resultPromise = mdLinks("C:\\DEV005-md-links\\src\\files", { validate: true });
     return resultPromise.then((result) => {
-      expect(result).toEqual(arrPrueba);
+      expect(result).toEqual(arrFiles);
     });
   });
 });
@@ -152,7 +152,7 @@ describe('readAllMds', () => {
 })
 
 
-// statsBroquen function
+// statsBroken function
 describe('statsBroken', () => {
   it('should be a function', () =>{
     expect( typeof statsBroken).toBe('function');
