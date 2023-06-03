@@ -6,18 +6,18 @@ const { JSDOM } = jsdom;
 const fetch = require('node-fetch');
 
 
-// RECURSIVE FUNCTION LOOK FOR MDS FILES,ADD THEN(array) AND RETURN
+// Recursive function to find MDS files, add them to an array, and return it.
 const getFilesMd = (directoryPath) => {
   let arrayFilesMd = [];
 
   const route = fs.lstatSync(directoryPath);
   if (route.isFile()) {
     arrayFilesMd.push(directoryPath);
+
   } else if (route.isDirectory()) {
     const arrayElements = fs.readdirSync(directoryPath);  
       // It allows to obtain elements of a directory and, we will have an array (files and directories)
     arrayElements.forEach((element) => {
-      // Para cada elemento encontrado en el directorio,construye una nueva ruta
       const newPath = path.join(directoryPath, element);
       arrayFilesMd = arrayFilesMd.concat(getFilesMd(newPath));
       // calling getFilesMd for each item found in the directory.
@@ -27,7 +27,7 @@ const getFilesMd = (directoryPath) => {
 };
 
 
-// FUNCTION TO CONVERT MD FILES TO HTML
+// Function to convert md files to Html
 const mdToHtml = (data) => {
   const htmlContent = marked(data, {
     headerIds: false,
@@ -41,7 +41,7 @@ const mdToHtml = (data) => {
 };
 
 
-// FUNCTION TO OBTAIN LINKS 
+// Function to abtain links
 const getLinks = (links, mdfilePath) => {
   const arrayLinks = [];
   links.forEach((link) => {
@@ -57,14 +57,14 @@ const getLinks = (links, mdfilePath) => {
 };
 
 
-// FUNCTION READS CONTENTS OF A FILE SPECIFIED BY mdFilePath
+// Function reads contents of a files specified by mdFilesPath
 // Get the content of a single file
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
-    //Para obtener un resultado rechazado o resuelto
     fs.readFile(filePath, 'utf-8', (error, data) => {
       if (error) {
         reject(error);
+
       } else {
         const convertHtml = mdToHtml(data);
         const linksFromHtml = getLinks(convertHtml, filePath);        
@@ -75,7 +75,7 @@ const readFile = (filePath) => {
 };
 
 
-// FUNCTION THAT TAKES AN ARRAY OF ROUTES .md
+// Function that takes an array of routes.md
 const readAllMds = (arrayFilesMd) => {
   const arrayLinks = arrayFilesMd.map((file) => readFile(file));
 
@@ -84,7 +84,7 @@ const readAllMds = (arrayFilesMd) => {
 };
 
 
-// FUNCTION TO VALIDATE EACH LINK OF THE ARRAY
+// Function to validate each link of the array 
 const validate = (arrayLinks)=> {
   return new Promise((resolve) => {
    // Allow to perform asynchronous operations

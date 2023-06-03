@@ -2,7 +2,7 @@
 
 const { mdLinks } = require('./index.js');
 const {statsBroken} = require('./getFilesMd.js');
-const process = require('process');//to access terminal arguments
+const process = require('process');// To access terminal arguments
 const userPath = process.argv[2];
 const {colors }= require ('colors')
 

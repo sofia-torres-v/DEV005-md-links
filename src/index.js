@@ -2,7 +2,7 @@ const { existPath, absolutePath } = require('./routeExist.js');
 const { getFilesMd, readAllMds, validate } = require('./getFilesMd.js');
 
 
-// Contiene la lógica principal para analizar los archivos y extraer los enlaces.
+// Contains the main logic for parsing the files and extracting the links.
 const mdLinks = (userPath, options) => {
   const route = absolutePath(userPath);
   return new Promise((resolve, reject) => {
@@ -22,7 +22,6 @@ const mdLinks = (userPath, options) => {
       readAllMds(arrayFiles)
       .then((res) => {
         resolve(res.flat());
-        // console.log(readAllMds);
       });
       }
   });
