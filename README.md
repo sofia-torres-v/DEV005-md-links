@@ -131,7 +131,7 @@ También acepta el siguiente orden
 * `Broken`: Número de links que no son válidos.
 
 ##### Captura de Pantalla: Ejemplo de Retorno en la Terminal:
-![Diagrama de Flujo](./images/statsBroquen.jpg)
+![Diagrama de Flujo](./images/statsBroken.jpg)
  
 ## 6. Checklist
 
