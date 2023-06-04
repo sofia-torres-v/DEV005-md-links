@@ -89,7 +89,7 @@ En el primer caso, si el usuario simplemente ingresa el siguiente comando en la 
 
 En el segundo caso, si el usuario ingresa en la termina la ruta y la opción --validate :
  
-  `mdLinks <path-to-file-or-directory> --validate`
+  `md-links <path-to-file-or-directory> --validate`
 
 ##### El valor de retorno será
 
@@ -105,7 +105,7 @@ En el segundo caso, si el usuario ingresa en la termina la ruta y la opción --v
 
 En el tercer caso, si el usuario ingresa en la termina la ruta y la opción --stats :
 
-`mdLinks <path-to-file-or-directory> --stats`
+`md-links <path-to-file-or-directory> --stats`
 
 ##### El valor de retorno será
 
@@ -121,7 +121,7 @@ En el cuarto y último caso, si el usuario ingresa en la termina la ruta y las o
 
 También acepta el siguiente orden
 
-`mdLinks <path-to-file-or-directory>  --validate --stats`
+`md-links <path-to-file-or-directory>  --validate --stats`
 
 ##### EL valor de retorno será
 
