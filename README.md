@@ -117,7 +117,7 @@ En el tercer caso, si el usuario ingresa en la termina la ruta y la opción --st
  
 En el cuarto y último caso, si el usuario ingresa en la termina la ruta y las opciones --stats --valiate :
 
-`mdLinks <path-to-file-or-directory> --stats --validate`
+`md-links <path-to-file-or-directory> --stats --validate`
 
 También acepta el siguiente orden
 
